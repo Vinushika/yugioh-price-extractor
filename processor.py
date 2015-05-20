@@ -9,7 +9,7 @@ values = vars(parser.parse_args())
 input_file = values['input_file']
 ##now load the DB (important! maybe add as an argument?) and parse the image
 text_extractor.get_list_from_db("cards.cdb")
-card_name = text_extractor.extract_text("koala.jpg")
+card_name = text_extractor.extract_text(input_file)
 ##and fetch price
 price = pricecrawler.get_price(card_name)
 print "Your card is %s and can be bought for %s at Trollandtoad.com" % (card_name, price)
