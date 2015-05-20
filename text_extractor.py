@@ -48,13 +48,22 @@ def extract_text(input_filename):
 	highlines = hightext.split("\n")
 	#first do the lowlines because there's more black-text cards (monsters)
 	#than any other cards, which increases our general accuracy slightly
-	#now go through the lines, trim
+	#now go through the lines, trim. If you examine too many, give up
+	#because we want to avoid searching card text - only card NAME!
+	linecounter = 0
 	for line in lowlines:
+		linecounter += 1
+		if linecounter > 10:
+			break
 		result = clean_line_and_match(line)
 		if result != -1:
 			return result
+	linecounter = 0
 	#if we haven't found anything with the low threshold, try the high one
 	for line in highlines:
+		linecounter += 1
+		if linecounter > 10:
+			break
 		result = clean_line_and_match(line)
 		if result != -1:
 			return result
