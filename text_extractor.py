@@ -13,8 +13,8 @@ CHOMP = 6 #how far we check for garbage in our strings
 MAX_LED = 6 #maximum LED to check for against DB
 LOW_THRESHOLD = 127
 HIGH_THRESHOLD = 200
-DB_WORD_LIST = None #gets read in when someone runs this script!
 GARBAGE_PATTERN = "[^a-zA-Z- ]"
+DB_WORD_LIST = None
 def extract_text(input_filename):
 	img= ndimage.imread(input_filename)
 	#first, grayscale input
@@ -29,7 +29,7 @@ def extract_text(input_filename):
 	#by saving and reloading
 	misc.imsave("lowthresh.png",lowthresh)
 	lowimg = cv2.cv.LoadImage("lowthresh.png",cv2.CV_LOAD_IMAGE_GRAYSCALE)
-	misc.imsage("highthresh.png",highthresh)
+	misc.imsave("highthresh.png",highthresh)
 	highimg = cv2.cv.LoadImage("highthresh.png",cv2.CV_LOAD_IMAGE_GRAYSCALE)
 	#now start up tesseract
 	api = tesseract.TessBaseAPI()
@@ -76,7 +76,7 @@ def extract_text(input_filename):
 ##toss it and go to the next line.
 def clean_line_and_match(line):
 	#check if the first few characters are garbage
-	first_chars = trimmed_line[0:CHOMP]
+	first_chars = line[0:CHOMP]
 	#if at least half of the first CHOMP characters are symbols, toss it
 	goodchars = re.sub(GARBAGE_PATTERN,"",first_chars)
 	if (CHOMP - len(goodchars)) / (float(CHOMP)) >= 0.5:
@@ -91,7 +91,7 @@ def clean_line_and_match(line):
 	#it just makes checking for LED faster, which is good
 	good_line = re.sub(GARBAGE_PATTERN,"",trimmed_line) #leave spaces in
 	#now match against the DB
-	minLEDMatch = get_min_LED_match(DB_WORD_LIST,MAX_LED,good_line)
+	minLEDMatch = levenshtein.get_min_LED_match(DB_WORD_LIST,MAX_LED,good_line)
 	return minLEDMatch #-1 if no match, else the match
 
 ##fills up a sortedlist (from sortedcontainers)
@@ -104,8 +104,8 @@ def get_list_from_db(db_file_name):
 	#get all card names, add to sortedlist. The iterable means it's prepopulated!
 	#sort by length of string, which we use to prune LED since a lot of card names are really long/short.
 	all_names = c.execute("SELECT name FROM texts") #fetch from DB
+	global DB_WORD_LIST
 	DB_WORD_LIST = sortedcontainers.SortedListWithKey(iterable=[re.sub(GARBAGE_PATTERN,"",x[0].lower())\
 			for x in all_names.fetchall()],load=100,key=lambda x: len(x))
-	#done
 	
 #conf=api.MeanTextConf()

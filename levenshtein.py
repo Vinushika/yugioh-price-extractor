@@ -40,7 +40,7 @@ def get_min_LED_match(sortedlist,maxLED,line):
 	minLED = maxLED + 1 #this may as well be Infinity
 	minWord = -1 #fill this in
 	for i in xrange(stopping_point): #xrange for less mem consumption since we're in Python < 3
-		current_distance = levenshtein(line,sortedlist[i])
+		current_distance = levenshtein(check_line,sortedlist[i])
 		if current_distance < minLED: #if less than the min, store it
 			minLED = current_distance
 			minWord = sortedlist[i]
