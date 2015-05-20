@@ -4,13 +4,13 @@ from numpy import ndarray #easier to handle than 2D python lists
 ##but translated to Python.
 def levenshtein(word1,word2):
 	ld_array = ndarray(shape=(len(word1)+1,len(word2)+1),dtype=int)
-	for i in range(len(word1)):
+	for i in range(len(word1) + 1):
 		ld_array[i][0] = i
-	for j in range(len(word2)):
+	for j in range(len(word2) + 1):
 		ld_array[0][j] = j
 	##loop over both strings, compute distance
-	for i in range(1,len(word1)):
-		for j in range(1,len(word2)):
+	for i in range(1,len(word1)+1):
+		for j in range(1,len(word2)+1):
 			if word1[i-1] == word2[j-1]:
 				##characters match, don't increase D
 				ld_array[i][j] = ld_array[i-1][j-1]
