@@ -60,7 +60,7 @@ def get_classifier():
 
 ##Creates a binary image of border vs nonborder
 ##WARNING: Assumes all of training_images are imread in, NOT file names!
-def classify(training_images,bin_classifier):
+def classify(testing_images,bin_classifier):
 	##now we have the classifier. Below is how it works - commented because testing is undefined!!
 	binary_detection_images = [] #list of our output images
 
