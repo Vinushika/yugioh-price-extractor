@@ -1,5 +1,6 @@
 import numpy as np
 import glob
+from scipy.misc import imread
 import scipy.ndimage
 
 training_images = []
@@ -11,7 +12,7 @@ trainmask = glob.glob("newtest_images/* shrunk train.png")
 for img in train:
     training_images.append(imread(img))
 for img in trainmask:
-    training_masks.append(imread(img))
+    training_masks.append(imread(img,flatten=True))
 
 #now define our bins (16x16x16)
 stepsize = 16
@@ -26,7 +27,7 @@ nonborder_count = np.zeros((number_of_bin_centers,number_of_bin_centers,number_o
 #the "classifier" is really just looking at whether there is more border than non-border in a particular bin.
 
 for img_num in range(len(training_images)):
-    height, width, colors = shape(training_images[img_num])
+    height, width, colors = np.shape(training_images[img_num])
     #images are, for example, 800x533, but shape
     #is 533x800, so height,width,colors.
     for x in range(height):
@@ -59,7 +60,7 @@ for r in range(len(bin_classifier)):
 binary_detection_images = [] #list of our output images
 
 #for num_image in range(len(testing_images)):
-#    height, width, colors = shape(testing_images[num_image])
+#    height, width, colors = np.shape(testing_images[num_image])
 #    binary_detection_images.append(np.zeros((height,width)))
 #    for x in range(height):
 #        for y in range(width):
