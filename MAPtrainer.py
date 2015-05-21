@@ -80,3 +80,4 @@ def classify(training_images,bin_classifier):
 	                binary_detection_images[num_image][x,y] = 255
 
 	#We don't need to do MORPH_CLOSE on them because we only want the edges, the inside is irrelevant.
+	return binary_detection_images
