@@ -4,7 +4,7 @@ import glob
 import time
 import cPickle as pickle
 
-TRAINING_IMAGES_FOLDER = "testPics/"
+TRAINING_IMAGES_FOLDER = "testDB/"
 EIGENCARD_FOLDER = "eigencardStorage/"
 NUM_EIGENCARDS = 10
 

@@ -8,15 +8,16 @@ import ast
 import sortedcontainers
 import cPickle as pickle
 
-TRAINING_IMAGES_FOLDER = "testPics/"
 INPUT_IMAGES_FOLDER = "./"
+INPUT_CARDNAME = "koala.jpg"
 EIGENCARD_FOLDER = "eigencardStorage/"
 NUM_EIGENCARDS = 10
+
 
 start_time = time.time()
 
 # For now, our input is just the Koala image.
-inputImgName = glob.glob(INPUT_IMAGES_FOLDER + "koala.jpg")
+inputImgName = glob.glob(INPUT_IMAGES_FOLDER + INPUT_CARDNAME)
 eigenCardNames = [EIGENCARD_FOLDER + "eigenCard%d.jpg" % i for i in range(NUM_EIGENCARDS)] # Needs to be in order for vector projection matching.
 eigenCards = [cv2.imread(fn, cv2.CV_LOAD_IMAGE_GRAYSCALE) for fn in eigenCardNames]
 
