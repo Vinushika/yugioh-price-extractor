@@ -11,7 +11,7 @@ import cPickle as pickle
 TRAINING_IMAGES_FOLDER = "testPics/"
 INPUT_IMAGES_FOLDER = "./"
 EIGENCARD_FOLDER = "eigencardStorage/"
-NUM_EIGENCARDS = 9
+NUM_EIGENCARDS = 10
 
 start_time = time.time()
 
@@ -44,7 +44,7 @@ maxX = np.max(xIndices)
 maxY = np.max(yIndices)
 
 # Crop and resize our image.
-inputImg = cv2.cvtColor(inputImage[0], cv2.COLOR_RGB2GRAY)
+inputImg = cv2.cvtColor(inputImage[0], cv2.COLOR_RGB2GRAY) #inputImage[0] for color
 inputCropped = inputImg[minY:maxY, minX:maxX]
 inputCropped = cv2.resize(inputCropped, eigenCards[0].shape[::-1])
 cv2.imwrite("cropped koala.jpg", inputCropped)
@@ -57,7 +57,7 @@ flattenedInput = inputCropped.flatten() - meanFlat
 inputVector = ()
 for eigenCard in eigenCards:
     projection = np.dot(eigenCard.flatten(), flattenedInput)
-    print "PROJECTION: ", projection
+    #print "PROJECTION: ", projection
     inputVector += (projection,)
 
 #print "INPUT VECTOR: " + str(inputVector)
@@ -77,12 +77,13 @@ with open(EIGENCARD_FOLDER + "databaseVectors.data") as f:
         databaseVectors[vector] = ID
 print "RECONSTRUCTED THE VECTOR DATABASE!"
 
-# Do MSE sorting to find the closest vector.
+# def our sorting function for vectors (tuples)
 def MSE(v):
     dist = 0
     for i in range(len(v)):
         dist += ((inputVector[i] - v[i]) ** 2)
-    print "MSE of ID: ", databaseVectors[v], " is: ", dist
+    dist /= float(len(v))
+    #print "MSE of ID: ", databaseVectors[v], " is: ", dist
     return dist
 
 #print "ABOUT TO DO SORTING"
@@ -94,7 +95,7 @@ sortedVectors = sortedcontainers.SortedListWithKey(iterable=databaseVectors.keys
 vectorMatch = sortedVectors[0]
 
 
-# Get the card ID from that vector. That's our result!
+# Get the card ID from that vector. That's our result! 
 ID = databaseVectors[vectorMatch]
 print "RESULT ID: %s" % ID
 print "TOTAL TIME: %0.3f" % (time.time() - start_time)

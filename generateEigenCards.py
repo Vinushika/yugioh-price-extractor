@@ -4,7 +4,7 @@ import glob
 import time
 import cPickle as pickle
 
-TRAINING_IMAGES_FOLDER = "pics/"
+TRAINING_IMAGES_FOLDER = "testPics/"
 EIGENCARD_FOLDER = "eigencardStorage/"
 NUM_EIGENCARDS = 10
 
@@ -75,6 +75,7 @@ X = np.zeros((len(inputFileNames), height*width))
 
 # Each image becomes one row in our big matrix.
 for i in range(len(inputFileNames)):
+    print "Reading in file: ", inputFileNames[i]
     X[i] = getImgGray(inputFileNames[i]).flatten()
 
 # Perform PCA
