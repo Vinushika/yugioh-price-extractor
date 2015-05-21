@@ -2,6 +2,13 @@ import numpy as np
 import glob
 from scipy.misc import imread
 import scipy.ndimage
+import cPickle as pickle
+
+#now define our bins (16x16x16)
+stepsize = 16
+bin_centers = np.arange(stepsize/2, 256, stepsize)
+number_of_bin_centers = len(bin_centers)
+
 ##Builds the MAP classifier from our dataset.
 def get_classifier():
 	training_images = []
@@ -15,10 +22,7 @@ def get_classifier():
 	for img in trainmask:
 	    training_masks.append(imread(img,flatten=True))
 
-	#now define our bins (16x16x16)
-	stepsize = 16
-	bin_centers = np.arange(stepsize/2, 256, stepsize)
-	number_of_bin_centers = len(bin_centers)
+	
 
 	#and create a storage for the bins
 	border_count = np.zeros((number_of_bin_centers,number_of_bin_centers,number_of_bin_centers))
@@ -65,11 +69,13 @@ def classify(testing_images,bin_classifier):
 	binary_detection_images = [] #list of our output images
 
 	for num_image in range(len(testing_images)):
-	    height, width, colors = np.shape(testing_images[num_image])
-	    binary_detection_images.append(np.zeros((height,width)))
+            test_image = testing_images[num_image]
+	    height, width, colors = np.shape(test_image)
+	    binary_image = np.zeros((height, width))
+	    
 	    for x in range(height):
 	        for y in range(width):
-	            pixel = testing_images[num_image][x,y,:]
+	            pixel = test_image[x,y,:]
 	            bin_location = np.zeros(colors)
 	            for c in range(colors):
 	                #find the closest bin (minimize distance) to the pixel
@@ -77,7 +83,12 @@ def classify(testing_images,bin_classifier):
 	                
 	            #now that we have the bin, check whether the bin is cone
 	            if (bin_classifier[bin_location[0],bin_location[1],bin_location[2]]):
-	                binary_detection_images[num_image][x,y] = 255
+	                binary_image[x,y] = 255
 
+	    binary_detection_images.append(binary_image)
 	#We don't need to do MORPH_CLOSE on them because we only want the edges, the inside is irrelevant.
 	return binary_detection_images
+
+def get_classifier_pickle():
+	with open("classifier.pickle", "rb") as f:
+		return pickle.load(f)
