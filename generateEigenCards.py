@@ -4,7 +4,7 @@ import glob
 import time
 import cPickle as pickle
 
-TRAINING_IMAGES_FOLDER = "testPics/"
+TRAINING_IMAGES_FOLDER = "pics/"
 EIGENCARD_FOLDER = "eigencardStorage/"
 NUM_EIGENCARDS = 10
 
@@ -114,13 +114,11 @@ for i in range(len(inputFileNames)):
     flattenedImg = getImgGray(fileName).flatten() - meanFlat
     values = ()
     for eigenCard in eigenCards:
-        print "DOT PRODUCTS: ", np.dot(eigenCard.flatten(), flattenedImg) == np.sum(eigenCard.flatten() * flattenedImg)
         projection = np.dot(eigenCard.flatten(), flattenedImg)
         values += (projection,)
     if (inputVectors.get(values) != None):
         print "ERROR: Two database cards have the same projection vector!"
     else:
-        print "PROJECTION: ", values
         inputVectors[values] = ID
 
 

@@ -26,10 +26,10 @@ bin_classifier = MAPtrainer.get_classifier_pickle()
 inputImage = [cv2.cvtColor(cv2.imread(fn), cv2.COLOR_BGR2RGB) for fn in inputImgName]
 print "GOT CLASSIFIER, GONNA CLASSIFY"
 
-classified_images = MAPtrainer.classify(inputImage, bin_classifier)
+#classified_images = MAPtrainer.classify(inputImage, bin_classifier)
 ##Now you've got binary images!
 
-#classified_images = [cv2.imread("classifier output.jpg", cv2.CV_LOAD_IMAGE_GRAYSCALE)]
+classified_images = [cv2.imread("classifier output.jpg", cv2.CV_LOAD_IMAGE_GRAYSCALE)]
 print "MAP Classification completed in %0.3f!" % (time.time() - start_time)
 
 inputOutline = classified_images[0]
